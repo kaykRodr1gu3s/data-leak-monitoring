@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "data-leak-monitoring"
+version = "0.1.0"
+description = ""
+authors = ["kaykRodr1gu3s <110197812+kaykRodr1gu3s@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32.3"
+bs4 = "^0.0.2"
+beautifulsoup4 = "4.9.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

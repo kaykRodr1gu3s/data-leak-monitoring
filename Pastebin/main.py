@@ -4,14 +4,15 @@ import re
 
 
 class Pastebin:
-
     def __init__(self):
         self.endpoint = "https://pastebin.com/"
         self.all_datas = {}
 
     @property
     def pastes(self):
-
+        """
+        This method will collect the links of the pastes
+        """
         req = requests.get(self.endpoint)
         bs = bs4.BeautifulSoup(req.content, "html.parser")
         bs = bs.find("ul", "sidebar__menu")
@@ -25,7 +26,10 @@ class Pastebin:
         return paste_link
 
     def paste_links(self, paste_link):
-        
+        """
+        This method will collect the user link and all the paste available on their profile
+        """
+
         user_href = {}
 
         for paste in paste_link:
@@ -51,10 +55,14 @@ class Pastebin:
                     user_href[username] = {"link": links}
 
             user_creator()
+
         return user_href
 
 
     def raw_content(self, content_link: dict):
+        """
+        This method will collect the paste content
+        """
         data_list = []
         for dict_key in content_link:
             print(dict_key)

@@ -1,17 +1,24 @@
 import requests
 import bs4
 import re
+import os 
+import sys
 
-class Pastefo:
-    def __init__(self):
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from Splunk.main import Splunk_indexer
+
+class Pastefo(Splunk_indexer):
+    def __init__(self, index_name):
         """
-        url_base = base for request
-        user-links = it will store the user link 
-        all_datas = it will store the json data 
+        index_name = index name to create on splunk or an existent index
         """
+        super().__init__(index_name)
+
         self.url_base = "https://paste.fo"
         self.user_links = []
         self.all_datas = []
+
 
     def user_link(self, num_page) -> None:
         """
@@ -80,16 +87,18 @@ class Pastefo:
 
                 table_href = bs.find("table", class_="pastelist profilepastelist")
                 table_href = table_href.find_all("tr")
+                paste_data = []
 
                 del table_href[0]
 
                 for table in table_href:
 
                     datas = table.find_all("td")
-                    content = requests.get(f"{self.url_base}/raw/{datas[0].find("a")["href"]}").content.decode("utf-8")
+                    content = requests.get(f"{self.url_base}/raw/{datas[0].find("a")["href"]}").content.decode("utf-8").replace("\r\n", " ")
+                    paste_data.append({"Link": f"https://paste.fo/{datas[0].find("a")["href"]}", "View": datas[1].text, "Paste Content": content})
 
-                    all_datas[link]["Pastes"] = {"Link": f"https://paste.fo/{datas[0].find("a")["href"]}", "View": datas[1].text, "Paste Content": content}
-                   
+                all_datas[link][f"Pastes"] = paste_data
+
             data_details()
             paste_href()
 
@@ -100,11 +109,12 @@ class Pastefo:
         """
         the main method joins all other methods with their respective arguments
         """
+        
         for num_page in range(1,6):     
             self.user_link(num_page)
             self.content_tracker(self.user_links)
-            
 
-pastefo = Pastefo()
+pastefo = Pastefo("pastefo")
 pastefo.main    
-print(pastefo.all_datas)
+pastefo.create_index
+pastefo.upload_datas(pastefo.all_datas)

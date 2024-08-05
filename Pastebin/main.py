@@ -1,10 +1,20 @@
+import bs4
+import os
 import requests
-import bs4 
 import re
+import sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-class Pastebin:
-    def __init__(self):
+from Splunk.main import Splunk_indexer
+
+print()
+class Pastebin(Splunk_indexer):
+    def __init__(self, index_name):
+        "index_name = name for create on splunk, if you already have an index, just pass as argument."
+
+        super().__init__(index_name)
+
         self.endpoint = "https://pastebin.com/"
         self.all_datas = {}
 
@@ -55,7 +65,6 @@ class Pastebin:
                     user_href[username] = {"link": links}
 
             user_creator()
-
         return user_href
 
 
@@ -63,18 +72,26 @@ class Pastebin:
         """
         This method will collect the paste content
         """
-        data_list = []
+        data_list = {}
+        cont = 0
         for dict_key in content_link:
-            print(dict_key)
-            for data in content_link[dict_key]["link"]:
+            self.all_datas[dict_key] = {"paste": {}}
 
+            for data in content_link[dict_key]["link"]:
                 req = requests.get(f"https://pastebin.com/raw{data}")
-                data_list.append({f"https://pastebin.com/raw/{data}": req.content.decode("utf-8").replace("\n", " ")})
-                self.all_datas[dict_key] = data_list
-                
+                if req.status_code == 200:
+                    data_list[f"https://pastebin.com/{data}"] = req.content.decode("utf-8").replace("Guide:", " ").replace("\n", "")
+
+                    self.all_datas[dict_key]["Pastes"] = data_list
+                    print(f"https://pastebin.com/raw{data}")
+                    cont += 1
+                    print(cont)
+
+    @property
     def main(self):
         self.raw_content(self.paste_links(self.pastes))
-        print(self.all_datas)
 
-pastebin = Pastebin()
-pastebin.main()
+pastebin = Pastebin("pastebin")
+pastebin.main
+pastebin.create_index
+pastebin.upload_datas(pastebin.all_datas)   

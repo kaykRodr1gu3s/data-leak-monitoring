@@ -8,6 +8,7 @@ install:
 	poetry init --no-interaction
 	poetry add requests bs4
 	poetry add python-dotenv
+	poetry add splunk-sdk
 	poetry shell
 
 pastefo:

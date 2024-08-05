@@ -5,7 +5,7 @@
 4. [Configuration](#configuration)
 5. [Executing](#executing)
 6. [Event on splunk](#event-on-splunk)
-
+7. [How to contribute](#How-to-contribute)
 
 ## Overview
 
@@ -81,3 +81,26 @@ With all configured, just need to execute the code the make command is: `make pa
 ## Event on splunk
 
 For visualize the event on splunk, open your splunk enterprise and go to seach&report and put `index=>index that you create<`
+
+
+```
+index=pastefo
+| spath input=_raw
+| spath path=paste_content{}.Link output=Link
+| table user Link
+| dedup user Link
+```
+This spl query will create a table with the user and ther respective link
+
+![image](https://github.com/user-attachments/assets/f9816836-9153-4c46-8c70-32e8dc627dec)
+
+
+
+## How to contribute
+
+   1. Fork the repository.
+   2. Create a branch for your contribution: `git checkout -b new feature`.
+   3. Make the desired changes and commit: `git commit -m "Add new functionality"`.
+   4. Push to your branch: `git push origin new-feature`.
+   5. Open a pull request.
+

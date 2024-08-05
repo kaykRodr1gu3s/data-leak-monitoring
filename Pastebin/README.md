@@ -1,5 +1,6 @@
 # Pastebin collector
 
+
 The [main.py](https://github.com/kaykRodr1gu3s/data-leak-monitoring/blob/main/Pastefo/main.py) script is designed to systematically collect and analyze user data from the Public posts on [Pastebin](https://pastebin.com/). This script performs the following key functions:
 
  1. Collect User Links: It navigates to the recent posts page on Pastefo and extracts all available user links.

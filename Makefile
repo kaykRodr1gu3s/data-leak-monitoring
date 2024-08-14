@@ -6,7 +6,7 @@ install:
 	pipx install poetry
 	
 	poetry init --no-interaction
-	poetry add requests bs4
+	poetry add requests
 	poetry add python-dotenv
 	poetry add splunk-sdk
 	poetry shell

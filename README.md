@@ -5,7 +5,7 @@
 4. [Configuration](#configuration)
 5. [Executing](#executing)
 6. [Event on splunk](#event-on-splunk)
-7. [How to contribute](#How-to-contribute)
+7. [How to contribute](#how-to-contribute)
 
 ## Overview
 
@@ -47,7 +47,7 @@ This project aims to create a comprehensive solution for collecting, processing,
 
   #### Chocolatey 
 
-  For install chocolatey in your windows, just read the documentation on [chocolatey[(https://chocolatey.org/install#individual)
+  For install chocolatey in your windows, just read the documentation on [chocolatey](https://chocolatey.org/install#individual)
 
   #### Make
 
